@@ -1,16 +1,14 @@
 # API-CRUD-audios
 
-Claro, aqui está uma descrição simples do projeto e um README para orientá-lo sobre como usá-lo:
-
 ### Descrição do Projeto
 
-Este projeto é uma API Flask para upload e atualização de arquivos de áudio. Ele permite que você envie arquivos de áudio associados a identificadores únicos (GUIDs). A API permite atualizar o áudio existente e, opcionalmente, alterar o GUID associado ao arquivo.
+Este projeto é uma API Flask para upload e atualização de arquivos de áudio. Ele permite que você envie arquivos de áudio associados a identificadores únicos (GUIDs). A API permite atualizar o áudio existente.
+Todos os dados referente ao arquivo de audio são salvos em um banco de dados não relacionais. Utilizando Mongo DB
 
 ### Estrutura do Projeto
 
-- `app.py`: Arquivo principal contendo a lógica da API.
+- `server.py`: Arquivo principal contendo a lógica da API.
 - `UPLOAD_FOLDER`: Diretório onde os arquivos de áudio são armazenados.
-- `audios_db`: Dicionário em memória para mapear GUIDs aos nomes dos arquivos de áudio.
 
 ### README
 
@@ -23,6 +21,7 @@ Esta API permite o upload e a atualização de arquivos de áudio associados a i
 
 - Python 3.6 ou superior
 - Flask
+- Mongo DB
 
 ## Instalação
 
@@ -52,12 +51,44 @@ UPLOAD_FOLDER = '/caminho/para/seu/diretorio/uploads'
 2. Inicie o servidor Flask:
 
 ```bash
-python app.py
+python server.py
 ```
 
 ## Uso
 
-### Endpoint: Upload e Atualização de Áudio
+### Endpoint: GET
+
+- **URL:** `/Home/list`
+- **Método:** `GET`
+
+### Endpoint: GET Object
+
+- **URL:** `/Home/<guid>>`
+- **Método:** `GET`
+
+- **Path Parameter:**
+- **Form Data:**
+  - `guid`: Arquivo que será retornado.
+
+### Endpoint: CREATE
+
+- **URL:** `/Home/create`
+- **Método:** `POST`
+
+- **Path Parameter:**
+- **Form Data:**
+  - `audios`: O novo arquivo de áudio a ser carregado.
+
+### Endpoint: DELETE
+
+- **URL:** `/Home/delete/<guid>`
+- **Método:** `DELETE`
+
+- **Path Parameter:**
+- **Form Data:**
+  - `guid`: Arquivo que será excluido.
+
+### Endpoint: UPLOAD e Atualização de Áudio
 
 - **URL:** `/Home/update/<guid>`
 - **Método:** `PUT`
@@ -69,7 +100,6 @@ python app.py
 
 - **Form Data:**
   - `audios`: O novo arquivo de áudio a ser carregado.
-  - `novo_guid` (opcional): O novo GUID para substituir o existente.
 
 #### Exemplo de Requisição com Postman
 
@@ -91,8 +121,7 @@ python app.py
 - **200 OK:** Se o áudio foi atualizado com sucesso.
   ```json
   {
-    "SUCESSO": "ARQUIVO ALTERADO COM EXITO",
-    "guid": "final_guid"
+    "SUCESSO": "ARQUIVO ALTERADO COM EXITO"
   }
   ```
 - **400 Bad Request:** Se ocorrer um erro (ex: áudio não enviado, GUID não existente, novo GUID já existente).
